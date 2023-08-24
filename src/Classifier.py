@@ -38,8 +38,8 @@ class Classifier:
     def compare_models(self):
         """Build a new binary classifier."""
         return compare_models(include=[
-                                    # 'xgboost',
-                                    'et',
+                                    'xgboost',
+                                    # 'et',
                                     # 'rf',
         ])
 
