@@ -38,10 +38,11 @@ class Classifier:
     def compare_models(self):
         """Build a new binary classifier."""
         return compare_models(include=[
-                                    'xgboost',
-                                    # 'et',
-                                    # 'rf',
-        ])
+            # 'xgboost',
+            # 'et',
+            # 'rf',
+            'mlp'
+            ])
 
     def setup(self, train_input: pd.DataFrame, schema: MulticlassClassificationSchema):
         """Set up the experiment of comparing different models.
@@ -50,7 +51,7 @@ class Classifier:
             train_input: The data  of training including the target column.
             schema: schema of the provided data.
         """
-        setup(train_input, target=schema.target, remove_outliers=True, normalize=True, ignore_features=[schema.id], train_size=0.98)
+        setup(train_input, target=schema.target, remove_outliers=True, normalize=True, ignore_features=[schema.id], train_size=0.99)
         add_metric('Macro F1', 'Macro F1', score_func=macro_f1_score, greater_is_better=True)
         remove_metric('kappa')
         remove_metric('mcc')
