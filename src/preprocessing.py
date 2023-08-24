@@ -50,8 +50,28 @@ def impute_with_probability(data: pd.DataFrame, column: str):
 
 
 def impute_with_mode(data: pd.DataFrame, column: str):
-    data[column] = data[column].fillna(data[column].mode()[0])
-    return data
+    mode = data[column].mode()[0]
+    data[column] = data[column].fillna(mode)
+    return data, mode
+
+
+def impute(df: pd.DataFrame, training: bool):
+    columns_with_missing = df.columns[df.isna().any()]
+    if training:
+        imputation_values = {}
+        for c in columns_with_missing:
+            if c == 'numoccs':
+                value = df['numoccs'].mean()
+                df['numoccs'].fillna(value, inplace=True)
+            else:
+                df, value = impute_with_mode(df, c)
+            imputation_values[c] = value
+        dump(imputation_values, paths.IMPUTATION_VALUES_FILE)
+    else:
+        imputation_values = load(paths.IMPUTATION_VALUES_FILE)
+        for c in columns_with_missing:
+            df[c].fillna(imputation_values[c], inplace=True)
+    return df
 
 
 def preprocess(data_dir: str = paths.TRAIN_DIR, training: bool = True) -> pd.DataFrame:
@@ -68,23 +88,12 @@ def preprocess(data_dir: str = paths.TRAIN_DIR, training: bool = True) -> pd.Dat
         target = df['driver_factor']
         df = df.drop(columns='driver_factor')
 
-    df[(df['deformed'].isna()) & (df['impact1'] == 'Non-Collision')]['deformed'] = \
-        df[(df['deformed'].isna()) & (df['impact1'] == 'Non-Collision')]['deformed'].fillna('No damage')
-
-    df = impute_with_mode(df, 'deformed')
-    df = impute_with_mode(df, 'impact1')
-    df = impute_with_mode(df, 'weather')
-
-    df['numoccs'].fillna(df['numoccs'].mean(), inplace=True)
+    df = impute(df, training)
 
     if training:
         df['driver_factor'] = target
-    df.dropna(inplace=True)
-    if training:
         target = df['driver_factor']
         df = df.drop(columns='driver_factor')
-
-    if training:
         encoder = OneHotEncoder(top_categories=6, drop_last=True, drop_last_binary=True)
         encoder.fit(df)
         dump(encoder, paths.ENCODER_FILE)

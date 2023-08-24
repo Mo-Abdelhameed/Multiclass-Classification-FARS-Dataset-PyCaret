@@ -21,6 +21,7 @@ TRAIN_DIR = os.path.join(DATA_DIR, "training")
 # Path to test directory inside data directory
 TEST_DIR = os.path.join(DATA_DIR, "testing")
 
+
 # Path to model directory
 MODEL_PATH = os.path.join(MODEL_INPUTS_OUTPUTS, "model")
 # Path to artifacts directory inside model directory
@@ -29,6 +30,9 @@ MODEL_ARTIFACTS_PATH = os.path.join(MODEL_PATH, "artifacts")
 SCALER_FILE = os.path.join(MODEL_ARTIFACTS_PATH, 'scaler.joblib')
 # Path to the encoder object used during training
 ENCODER_FILE = os.path.join(MODEL_ARTIFACTS_PATH, 'encoder.joblib')
+# Path to imputations used during training
+IMPUTATION_VALUES_FILE = os.path.join(MODEL_ARTIFACTS_PATH, 'imputations.joblib')
+
 
 # Path to saved schema in artifacts directory
 SAVED_SCHEMA_DIR_PATH = os.path.join(MODEL_ARTIFACTS_PATH, "schema")

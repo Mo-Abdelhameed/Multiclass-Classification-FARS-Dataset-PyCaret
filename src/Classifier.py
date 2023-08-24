@@ -38,9 +38,9 @@ class Classifier:
     def compare_models(self):
         """Build a new binary classifier."""
         return compare_models(include=[
-                                    'xgboost',
+                                    # 'xgboost',
                                     'et',
-                                    'rf',
+                                    # 'rf',
         ])
 
     def setup(self, train_input: pd.DataFrame, schema: MulticlassClassificationSchema):
@@ -96,7 +96,7 @@ class Classifier:
         Args:
             model_dir_path (str): Dir path to the saved model.
         Returns:
-            Classifier: A new instance of the loaded KNN binary classifier.
+            Classifier: A new instance of the loaded binary classifier.
         """
         model = joblib.load(os.path.join(model_dir_path, PREDICTOR_FILE_NAME))
         return model
