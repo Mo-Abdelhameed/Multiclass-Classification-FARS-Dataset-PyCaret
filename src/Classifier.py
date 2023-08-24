@@ -38,10 +38,7 @@ class Classifier:
     def compare_models(self):
         """Build a new binary classifier."""
         return compare_models(include=[
-            # 'xgboost',
-            # 'et',
-            # 'rf',
-            'mlp'
+            'xgboost'
             ])
 
     def setup(self, train_input: pd.DataFrame, schema: MulticlassClassificationSchema):
