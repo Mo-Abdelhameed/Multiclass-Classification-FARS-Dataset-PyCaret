@@ -1,4 +1,4 @@
-# Multiclass-Classification-FARS-Dataset
+# Multiclass-Classification-FARS-Dataset-PyCaret
 
 ## Overview
 
