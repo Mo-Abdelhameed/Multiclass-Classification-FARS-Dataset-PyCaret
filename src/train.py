@@ -3,7 +3,7 @@ from Classifier import Classifier
 from config import paths
 from logger import get_logger, log_error
 from schema.data_schema import load_json_data_schema, save_schema
-from utils import set_seeds
+from utils import set_seeds, read_csv_in_directory
 from preprocessing import preprocess
 
 logger = get_logger(task_name="train")
@@ -35,8 +35,10 @@ def run_training(
         save_schema(schema=data_schema, save_dir_path=saved_schema_dir_path)
 
         logger.info("Starting preprocessing data...")
-
-        x_train = preprocess(train_dir, training=True)
+        if data_schema.description == 'Fatality Analysis Reporting System Dataset':
+            x_train = preprocess(train_dir, training=True)
+        else:
+            x_train = read_csv_in_directory(train_dir)
 
         logger.info('Starting Training...')
 

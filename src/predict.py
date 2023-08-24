@@ -1,6 +1,6 @@
 import pandas as pd
 from config import paths
-from utils import save_dataframe_as_csv
+from utils import save_dataframe_as_csv, read_csv_in_directory
 from logger import get_logger
 from Classifier import Classifier
 from schema.data_schema import load_saved_schema, MulticlassClassificationSchema
@@ -54,15 +54,19 @@ def run_batch_predictions() -> None:
         adds ids into the predictions dataframe,
         and saves the predictions as a CSV file.
         """
-    x_test = preprocess(paths.TEST_DIR, training=False)
+
     data_schema = load_saved_schema(paths.SAVED_SCHEMA_DIR_PATH)
+    if data_schema.description == 'Fatality Analysis Reporting System Dataset':
+        x_test = preprocess(paths.TEST_DIR, training=False)
+    else:
+        x_test = read_csv_in_directory(paths.TEST_DIR)
     model = Classifier.load(paths.PREDICTOR_DIR_PATH)
     logger.info("Making predictions...")
     predictions_df = Classifier.predict_with_model(model, x_test, raw_score=True)
     predictions_df = create_predictions_dataframe(
         predictions_df,
         data_schema,
-        return_probs=False,
+        return_probs=True,
     )
 
     logger.info("Saving predictions...")
