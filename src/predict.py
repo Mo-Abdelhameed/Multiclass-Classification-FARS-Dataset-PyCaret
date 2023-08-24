@@ -1,6 +1,6 @@
 import pandas as pd
 from config import paths
-from utils import read_csv_in_directory, save_dataframe_as_csv
+from utils import save_dataframe_as_csv
 from logger import get_logger
 from Classifier import Classifier
 from schema.data_schema import load_saved_schema, MulticlassClassificationSchema
